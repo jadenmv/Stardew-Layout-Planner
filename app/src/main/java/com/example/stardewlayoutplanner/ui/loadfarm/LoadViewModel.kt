@@ -12,9 +12,9 @@ class LoadViewModel : ViewModel() {
     init {
         _farmFiles.addAll(
             listOf(
-                Farm(1, "New Farm", "Beach"),
-                Farm(2, "Cool farm", "Standard"),
-                Farm(3, "Barn", "Hilltop"),
+                Farm("New Farm", "Beach"),
+                Farm("Cool farm", "Standard"),
+                Farm("Barn", "Hilltop"),
             )
         )
     }

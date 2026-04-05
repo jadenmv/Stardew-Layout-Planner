@@ -17,21 +17,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.stardewlayoutplanner.ui.loadfarm.FarmFileRow
 
 @Composable
 fun LoadFarmScreen(
-    navController: NavController,
-    viewModel: LoadViewModel = viewModel()
+    nav: NavHostController,
+    vm: LoadViewModel = viewModel()
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF90CAF9))
     ) {
-        // Back button (top-left)
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -40,11 +38,10 @@ fun LoadFarmScreen(
                 contentDescription = "Back",
                 modifier = Modifier
                     .size(56.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { nav.popBackStack() }
             )
         }
 
-        // Centered content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,8 +69,8 @@ fun LoadFarmScreen(
                         end = 12.dp
                     )
                 ) {
-                    items(viewModel.farmFiles, key = { it.id }) { file ->
-                        FarmFileRow(farmFile = file)
+                    items(vm.farmFiles, key = { it.name }) { farm ->
+                        FarmFileRow(farmFile = farm)
                     }
                 }
             }
@@ -87,7 +84,7 @@ fun LoadFarmScreen(
 fun LoadFarmScreenPreview() {
     val dummyViewModel = LoadViewModel()
     LoadFarmScreen(
-        navController = rememberNavController(),
-        viewModel = dummyViewModel
+        nav = rememberNavController(),
+        vm = dummyViewModel
     )
 }

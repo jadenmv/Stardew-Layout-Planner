@@ -72,7 +72,6 @@ fun FarmFileRow(farmFile: Farm) {
 @Composable
 fun FarmFileRowPreview() {
     val sampleFarm = Farm(
-        id = 1,
         name = "My Cool Farm",
         type = "Standard",
         imageRes = null

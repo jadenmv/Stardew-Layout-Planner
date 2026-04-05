@@ -1,23 +1,25 @@
 package com.example.stardewlayoutplanner.ui.newfarm
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.stardewlayoutplanner.data.model.Farm
+import com.example.stardewlayoutplanner.ui.FarmViewModel
+import com.example.stardewlayoutplanner.ui.nav.CreationScreen
 import com.example.stardewlayoutplanner.data.FarmTypes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewFarmMenu(
-    newFarmViewModel: NewFarmViewModel,
+fun NewFarmDialog(
+    farmViewModel: FarmViewModel,
     onDismiss: () -> Unit,
     onCreate: () -> Unit
 ) {
-    val farmName by newFarmViewModel.farmName.collectAsState()
-    val selectedFarmType by newFarmViewModel.farmType.collectAsState()
+    var farmName by remember { mutableStateOf("") }
+    var selectedFarmType by remember { mutableStateOf(FarmTypes.all.first()) }
     var expanded by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -27,7 +29,7 @@ fun NewFarmMenu(
             Column {
                 TextField(
                     value = farmName,
-                    onValueChange = newFarmViewModel::setFarmName,
+                    onValueChange = { farmName = it },
                     label = { Text("Farm Name") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -45,9 +47,7 @@ fun NewFarmMenu(
                         onValueChange = {},
                         label = { Text("Farm Type") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
+                        modifier = Modifier.menuAnchor().fillMaxWidth()
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
@@ -57,7 +57,7 @@ fun NewFarmMenu(
                             DropdownMenuItem(
                                 text = { Text(type) },
                                 onClick = {
-                                    newFarmViewModel.setFarmType(type)
+                                    selectedFarmType = type
                                     expanded = false
                                 }
                             )
@@ -67,7 +67,17 @@ fun NewFarmMenu(
             }
         },
         confirmButton = {
-            Button(onClick = onCreate) {
+            Button(onClick = {
+                val newFarm = Farm(
+                    name = farmName,
+                    type = selectedFarmType
+                )
+                farmViewModel.createNewFarm(newFarm)
+
+                onCreate()
+
+                onDismiss()
+            }) {
                 Text("Create")
             }
         },
@@ -79,14 +89,14 @@ fun NewFarmMenu(
     )
 }
 
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun NewFarmMenuPreview() {
-    val viewModel = NewFarmViewModel()
-    NewFarmMenu(
-        newFarmViewModel = viewModel,
-        onDismiss = {},
-        onCreate = {}
-    )
-}
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview(showBackground = true)
+//@Composable
+//fun NewFarmMenuPreview() {
+//    val viewModel = NewFarmViewModel()
+//    NewFarmMenu(
+//        newFarmViewModel = viewModel,
+//        onDismiss = {},
+//        onCreate = {}
+//    )
+//}

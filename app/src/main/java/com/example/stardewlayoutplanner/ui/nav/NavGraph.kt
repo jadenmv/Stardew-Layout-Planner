@@ -1,37 +1,49 @@
 package com.example.stardewlayoutplanner.ui.nav
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import com.example.stardewlayoutplanner.ui.CreationScreen
+import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.MainMenuScreen
 import com.example.stardewlayoutplanner.ui.loadfarm.LoadFarmScreen
-import com.example.stardewlayoutplanner.ui.newfarm.NewFarmViewModel
+import com.example.stardewlayoutplanner.ui.loadfarm.LoadViewModel
 
 @Composable
 fun NavGraph(
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val newFarmViewModel: NewFarmViewModel = viewModel()
-
+    val farmViewModel: FarmViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = MainMenu,
         modifier = modifier
     ) {
+
         composable<MainMenu> {
-            MainMenuScreen()
+            MainMenuScreen(
+                nav = navController,
+                farmViewModel = farmViewModel
+            )
         }
 
         composable<LoadScreen> {
-            LoadFarmScreen(navController = navController)
+            val loadViewModel = viewModel<LoadViewModel>()
+            LoadFarmScreen(
+                nav = navController,
+                vm = loadViewModel
+            )
         }
 
+        composable<CreationScreen> {
+             CreationScreen(
+                 nav = navController,
+                 farmViewModel = farmViewModel
+             )
+        }
     }
 }

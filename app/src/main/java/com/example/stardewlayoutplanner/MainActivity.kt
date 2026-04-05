@@ -3,7 +3,8 @@ package com.example.stardewlayoutplanner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.stardewlayoutplanner.ui.MainMenuScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.stardewlayoutplanner.ui.nav.NavGraph
 import com.example.stardewlayoutplanner.ui.theme.StardewLayoutPlannerTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StardewLayoutPlannerTheme {
-                MainMenuScreen()
+                val navController = rememberNavController()
+                NavGraph(navController = navController)
             }
         }
     }
