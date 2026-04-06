@@ -1,5 +1,6 @@
 package com.example.stardewlayoutplanner.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,10 +8,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +22,7 @@ import com.example.stardewlayoutplanner.ui.newfarm.NewFarmDialog
 import com.example.stardewlayoutplanner.ui.nav.CreationScreen
 import com.example.stardewlayoutplanner.ui.nav.LoadScreen
 import com.example.stardewlayoutplanner.ui.nav.MainMenu
+import com.example.stardewlayoutplanner.ui.theme.StardewLayoutPlannerTheme
 
 @Composable
 fun MainMenuScreen(
@@ -34,7 +39,7 @@ fun MainMenuScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(32.dp),
+                .padding(48.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -47,25 +52,30 @@ fun MainMenuScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Stardew Layout Planner",
+                    modifier = Modifier.padding(32.dp),
+                    text = "Stardew Layout Planner (logo placeholder)",
                     color = Color.Black,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
                 )
             }
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     onClick = { showNewMenu = true },
                     modifier = Modifier
                         .width(180.dp)
-                        .height(50.dp),
+                        .height(80.dp),
                     shape = RoundedCornerShape(5.dp)
                 ) {
-                    Text("New")
+                    Text(
+                        text = "New",
+                        fontSize = 24.sp
+                    )
                 }
 
                 Button(
@@ -77,10 +87,13 @@ fun MainMenuScreen(
                     },
                     modifier = Modifier
                         .width(180.dp)
-                        .height(50.dp),
+                        .height(80.dp),
                     shape = RoundedCornerShape(5.dp)
                 ) {
-                    Text("Load")
+                    Text(
+                        text = "Load",
+                        fontSize = 24.sp
+                    )
                 }
             }
 
@@ -104,5 +117,14 @@ fun MainMenuScreen(
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    StardewLayoutPlannerTheme() {
+        MainMenuScreen()
     }
 }

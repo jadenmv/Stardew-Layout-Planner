@@ -1,9 +1,11 @@
 package com.example.stardewlayoutplanner.ui
 
+
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.stardewlayoutplanner.data.model.Farm
+import com.example.stardewlayoutplanner.data.impl.farmRepository
 
 class FarmViewModel : ViewModel() {
 
@@ -12,6 +14,7 @@ class FarmViewModel : ViewModel() {
 
     fun createNewFarm(newFarm: Farm) {
         _farm.value = newFarm
+        farmRepository.addFarm(newFarm)
     }
 
     fun setFarm(farm: Farm) {

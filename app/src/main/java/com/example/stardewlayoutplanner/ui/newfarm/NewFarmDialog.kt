@@ -1,15 +1,27 @@
 package com.example.stardewlayoutplanner.ui.newfarm
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import com.example.stardewlayoutplanner.data.FarmTypes
 import com.example.stardewlayoutplanner.data.model.Farm
 import com.example.stardewlayoutplanner.ui.FarmViewModel
-import com.example.stardewlayoutplanner.ui.nav.CreationScreen
-import com.example.stardewlayoutplanner.data.FarmTypes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,7 +31,7 @@ fun NewFarmDialog(
     onCreate: () -> Unit
 ) {
     var farmName by remember { mutableStateOf("") }
-    var selectedFarmType by remember { mutableStateOf(FarmTypes.all.first()) }
+    var selectedFarmType by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -47,7 +59,9 @@ fun NewFarmDialog(
                         onValueChange = {},
                         label = { Text("Farm Type") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
@@ -66,6 +80,7 @@ fun NewFarmDialog(
                 }
             }
         },
+
         confirmButton = {
             Button(onClick = {
                 val newFarm = Farm(
@@ -73,14 +88,13 @@ fun NewFarmDialog(
                     type = selectedFarmType
                 )
                 farmViewModel.createNewFarm(newFarm)
-
                 onCreate()
-
                 onDismiss()
             }) {
                 Text("Create")
             }
         },
+
         dismissButton = {
             Button(onClick = onDismiss) {
                 Text("Cancel")
