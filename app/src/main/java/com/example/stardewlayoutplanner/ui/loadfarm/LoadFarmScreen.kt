@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.stardewlayoutplanner.ui.FarmViewModel
+import com.example.stardewlayoutplanner.ui.nav.CreationScreen
 
 @Composable
 fun LoadFarmScreen(
     nav: NavHostController,
-    vm: LoadViewModel = viewModel()
+    vm: LoadViewModel = viewModel(),
+    farmViewModel: FarmViewModel = viewModel()
 ) {
     Box(
         modifier = Modifier
@@ -70,7 +73,13 @@ fun LoadFarmScreen(
                     )
                 ) {
                     items(vm.farmFiles, key = { it.name }) { farm ->
-                        FarmFileRow(farmFile = farm)
+                        FarmFileRow(
+                            farmFile = farm,
+                            onClick = {
+                                farmViewModel.setFarm(farm)
+                                nav.navigate(CreationScreen)
+                            }
+                        )
                     }
                 }
             }

@@ -73,7 +73,7 @@ fun MainMenuScreen(
                     shape = RoundedCornerShape(5.dp)
                 ) {
                     Text(
-                        text = "New",
+                        text = "New Farm",
                         fontSize = 24.sp
                     )
                 }
@@ -91,7 +91,7 @@ fun MainMenuScreen(
                     shape = RoundedCornerShape(5.dp)
                 ) {
                     Text(
-                        text = "Load",
+                        text = "Load Farm",
                         fontSize = 24.sp
                     )
                 }

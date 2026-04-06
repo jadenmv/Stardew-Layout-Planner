@@ -2,6 +2,7 @@ package com.example.stardewlayoutplanner.ui.loadfarm
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,13 +18,17 @@ import androidx.compose.ui.unit.sp
 import com.example.stardewlayoutplanner.data.model.Farm
 
 @Composable
-fun FarmFileRow(farmFile: Farm) {
+fun FarmFileRow(
+    farmFile: Farm,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
             .background(Color(0xFFF5F5F5))
-            .padding(6.dp),
+            .padding(6.dp)
+            .clickable{onClick()},
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
@@ -68,15 +73,15 @@ fun FarmFileRow(farmFile: Farm) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun FarmFileRowPreview() {
-    val sampleFarm = Farm(
-        name = "My Cool Farm",
-        type = "Standard",
-        imageRes = null
-    )
-    Surface {
-        FarmFileRow(farmFile = sampleFarm)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun FarmFileRowPreview() {
+//    val sampleFarm = Farm(
+//        name = "My Cool Farm",
+//        type = "Standard",
+//        imageRes = null
+//    )
+//    Surface {
+//        FarmFileRow(farmFile = sampleFarm)
+//    }
+//}
