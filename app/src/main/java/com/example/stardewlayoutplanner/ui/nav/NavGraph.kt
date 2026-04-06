@@ -18,6 +18,8 @@ fun NavGraph(
     modifier: Modifier = Modifier
 ) {
     val farmViewModel: FarmViewModel = viewModel()
+    val loadViewModel: LoadViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = MainMenu,
@@ -32,10 +34,10 @@ fun NavGraph(
         }
 
         composable<LoadScreen> {
-            val loadViewModel = viewModel<LoadViewModel>()
             LoadFarmScreen(
                 nav = navController,
-                vm = loadViewModel
+                vm = loadViewModel,
+                farmViewModel = farmViewModel
             )
         }
 
