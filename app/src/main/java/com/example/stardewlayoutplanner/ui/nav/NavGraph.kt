@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.stardewlayoutplanner.ui.CreationScreen
+import com.example.stardewlayoutplanner.ui.creatingfarm.CreationScreen
 import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.MainMenuScreen
 import com.example.stardewlayoutplanner.ui.loadfarm.LoadFarmScreen
