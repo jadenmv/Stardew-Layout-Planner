@@ -1,19 +1,21 @@
 package com.example.stardewlayoutplanner.ui.loadfarm
 
 import android.annotation.SuppressLint
+import android.app.Application
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,32 +24,41 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.nav.CreationScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadFarmScreen(
     nav: NavHostController,
     vm: LoadViewModel = viewModel(),
     farmViewModel: FarmViewModel = viewModel()
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF90CAF9))
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(56.dp)
-                    .clickable { nav.popBackStack() }
-            )
-        }
+    LaunchedEffect(Unit) {
+        vm.loadFarms()
+    }
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Load Farm") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { nav.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            )
+        },
+        containerColor = Color(0xFF90CAF9)
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -55,7 +66,7 @@ fun LoadFarmScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight(0.8f)
                     .background(Color.White)
                     .padding(vertical = 8.dp)
             ) {
@@ -91,7 +102,8 @@ fun LoadFarmScreen(
 @Preview
 @Composable
 fun LoadFarmScreenPreview() {
-    val dummyViewModel = LoadViewModel()
+    val context = LocalContext.current
+    val dummyViewModel = LoadViewModel(app = context.applicationContext as Application)
     LoadFarmScreen(
         nav = rememberNavController(),
         vm = dummyViewModel

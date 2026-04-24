@@ -1,12 +1,13 @@
 package com.example.stardewlayoutplanner.data
 
 import com.example.stardewlayoutplanner.data.model.Category
+import com.example.stardewlayoutplanner.R
 
 val crops = Category(
     name = "Crops",
     imageRes = null, //R.drawable.
     subItems = listOf(
-        Category(name = "pumpkin"),
+        Category(name = "pumpkin", imageRes = R.drawable.pumpkin),
         Category(name = "corn"),
         Category(name = "cranberry"),
         Category(name = "cauliflower"),

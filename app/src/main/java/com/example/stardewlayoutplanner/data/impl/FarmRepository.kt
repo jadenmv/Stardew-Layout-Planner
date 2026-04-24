@@ -9,13 +9,15 @@ class FarmRepository : IFarmRepository {
 
     private val farms = mutableStateListOf<Farm>()
 
-    override fun getFarms(): List<Farm> = farms
+    override suspend fun getFarms(): List<Farm> {
+        return farms
+    }
 
-    override fun addFarm(farm: Farm) {
+    override suspend fun addFarm(farm: Farm) {
         farms.add(farm)
     }
 
-    override fun deleteFarm(farm: Farm) {
+    override suspend fun deleteFarm(farm: Farm) {
         farms.remove(farm)
     }
 }
