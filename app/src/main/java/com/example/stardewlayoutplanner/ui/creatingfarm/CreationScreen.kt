@@ -46,6 +46,32 @@ fun CreationScreen(
 
     var placedItems by remember { mutableStateOf(listOf<PlaceableItem>()) }
 
+    // Save Dialog UI
+    if (farmViewModel.saveDialog.showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { farmViewModel.saveDialog.hideDialog() },
+            title = { Text("Save Farm?") },
+            text = { Text("Would you like to save your current farm layout?") },
+            confirmButton = {
+                Button(onClick = {
+                    farm?.let { farmViewModel.createNewFarm(it) }
+                    farmViewModel.saveDialog.hideDialog()
+                    nav.popBackStack()
+                }) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    farmViewModel.saveDialog.hideDialog()
+                    nav.popBackStack()
+                }) {
+                    Text("No")
+                }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,7 +80,7 @@ fun CreationScreen(
                     containerColor = Color.Transparent
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { nav.popBackStack() }) {
+                    IconButton(onClick = { farmViewModel.saveDialog.showDialog() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",

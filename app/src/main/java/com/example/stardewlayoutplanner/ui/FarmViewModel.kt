@@ -23,6 +23,8 @@ class FarmViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _repository: IFarmRepository = FarmDatabaseRepository(app)
 
+    val saveDialog: SaveDialog = SaveDialog()
+
     init {
         loadFarms()
     }
@@ -55,5 +57,18 @@ class FarmViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setFarm(farm: Farm?) {
         _selected.value = farm
+    }
+
+    class SaveDialog {
+        private val _showDialog: MutableState<Boolean> = mutableStateOf(false)
+        val showDialog: State<Boolean> = _showDialog
+
+        fun hideDialog() {
+            _showDialog.value = false
+        }
+
+        fun showDialog() {
+            _showDialog.value = true
+        }
     }
 }
