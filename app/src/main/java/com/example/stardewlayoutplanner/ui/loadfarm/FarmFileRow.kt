@@ -20,13 +20,17 @@ import com.example.stardewlayoutplanner.data.model.Farm
 @Composable
 fun FarmFileRow(
     farmFile: Farm,
+    isSelected: Boolean,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
-            .background(Color(0xFFF5F5F5))
+            .background(
+                if (isSelected) Color.Gray.copy(alpha = 0.3f)
+                else Color(0xFFF5F5F5)
+            )
             .padding(6.dp)
             .clickable{onClick()},
         verticalAlignment = Alignment.CenterVertically

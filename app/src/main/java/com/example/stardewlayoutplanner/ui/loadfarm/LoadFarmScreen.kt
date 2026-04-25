@@ -9,15 +9,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -35,10 +38,15 @@ fun LoadFarmScreen(
         vm.loadFarms()
     }
 
+    val selectionMode by vm.selectionMode
+    val hasSelection = vm.hasSelection()
+    val showDialog by vm.showDialog
+    val farms by vm.farmFiles
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Load Farm") },
+                title = { Text("") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
                 ),
@@ -47,8 +55,37 @@ fun LoadFarmScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.size(45.dp)
                         )
+                    }
+                },
+                // deleting farm
+                actions = {
+                    if (!selectionMode) {
+                        TextButton(onClick = { vm.toggleSelectionMode() }) {
+                            Text(
+                                text = "Select",
+                                fontSize = 24.sp,
+                            )
+                        }
+                    } else {
+                        if (hasSelection) {
+                            IconButton(
+                                onClick = { vm.showDeleteDialog() }
+                            ) {
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    modifier = Modifier.size(45.dp)
+                                )
+                            }
+                        }
+                        TextButton(onClick = { vm.toggleSelectionMode() }) {
+                            Text(
+                                text = "Done",
+                                fontSize = 24.sp,
+                                )
+                        }
                     }
                 }
             )
@@ -83,17 +120,47 @@ fun LoadFarmScreen(
                         end = 12.dp
                     )
                 ) {
-                    items(vm.farmFiles, key = { it.name }) { farm ->
+                    items(farms, key = { it.name }) { farm ->
+
+                        val isSelected = vm.selectedFarms.contains(farm)
+
                         FarmFileRow(
                             farmFile = farm,
+                            isSelected = isSelected,
                             onClick = {
-                                farmViewModel.setFarm(farm)
-                                nav.navigate(CreationScreen)
+                                if (selectionMode) {
+                                    vm.toggleFarm(farm)
+                                } else {
+                                    farmViewModel.setFarm(farm)
+                                    nav.navigate(CreationScreen)
+                                }
                             }
                         )
                     }
                 }
             }
+        }
+
+        // deletion dialog
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { vm.hideDeleteDialog() },
+                title = { Text("Delete Farms?") },
+                text = { Text("Are you sure you want to delete selected farms?") },
+                confirmButton = {
+                    Button(onClick = {
+                        vm.deleteSelected()
+                        vm.hideDeleteDialog()
+                    }) {
+                        Text("Delete")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { vm.hideDeleteDialog() }) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }

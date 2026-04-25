@@ -27,6 +27,7 @@ import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.creatingfarm.creationrowcategory.CategoryButton
 import com.example.stardewlayoutplanner.ui.creatingfarm.creationrowcategory.CategoryViewModel
 import com.example.stardewlayoutplanner.ui.loadfarm.LoadViewModel
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +47,6 @@ fun CreationScreen(
 
     var placedItems by remember { mutableStateOf(listOf<PlaceableItem>()) }
 
-    // Save Dialog UI
     if (farmViewModel.saveDialog.showDialog.value) {
         AlertDialog(
             onDismissRequest = { farmViewModel.saveDialog.hideDialog() },
@@ -77,10 +77,11 @@ fun CreationScreen(
             TopAppBar(
                 title = { Text(text = farm?.name ?: "Plan Your Farm") },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { farmViewModel.saveDialog.showDialog() }) {
+                    IconButton(onClick = { nav.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",
@@ -124,7 +125,10 @@ fun CreationScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(items) { category ->
-                            CategoryButton(category) {
+                            CategoryButton(
+                                category,
+                                isSelected = category == selectedItem
+                            ) {
                                 if (category.subItems.isNotEmpty()) {
                                     categoryViewModel.onCategoryClick(category)
                                 } else {
@@ -137,26 +141,31 @@ fun CreationScreen(
             }
         }
     ) { innerPadding ->
+
         Box(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
         ) {
+
 //            CreationFarmCanvas(
 //                placeableItems = placedItems,
-//                onPlaceItem = { offset ->
-//                    selectedItem?.let { category ->
-//                        placedItems = placedItems + PlaceableItem(category, offset)
-//                    }
+//                selectedCategory = selectedItem,
+//                onPlaceItem = { grid, category ->
+//                    placedItems = placedItems + PlaceableItem(
+//                        id = UUID.randomUUID().toString(),
+//                        category = category,
+//                        position = grid
+//                    )
 //                }
 //            )
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(innerPadding)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top // Changed to Top to not block canvas center
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(
                     text = "Farm Type: ${farm?.type ?: "Unknown"}",

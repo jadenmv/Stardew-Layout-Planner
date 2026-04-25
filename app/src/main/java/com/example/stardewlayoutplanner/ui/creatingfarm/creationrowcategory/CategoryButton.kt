@@ -16,8 +16,9 @@ import com.example.stardewlayoutplanner.data.model.Category
 @Composable
 fun CategoryButton(
     category: Category,
+    isSelected: Boolean,
     onClick: () -> Unit
-) {
+){
     Button(
         onClick = onClick,
         contentPadding = PaddingValues(0.dp),
