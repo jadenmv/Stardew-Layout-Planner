@@ -1,7 +1,6 @@
 package com.example.stardewlayoutplanner.data.model
 
 import androidx.room3.*
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "farm")
 data class Farm(

@@ -26,13 +26,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.nav.CreationScreen
+import kotlin.Boolean
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadFarmScreen(
     nav: NavHostController,
     vm: LoadViewModel = viewModel(),
-    farmViewModel: FarmViewModel = viewModel()
+    farmViewModel: FarmViewModel = viewModel(),
+    waiting: Boolean = false,
 ) {
     LaunchedEffect(Unit) {
         vm.loadFarms()
@@ -89,7 +91,11 @@ fun LoadFarmScreen(
                     }
                 }
             )
+            if(waiting) {
+                CircularProgressIndicator()
+            }
         },
+
         containerColor = Color(0xFF90CAF9)
     ) { innerPadding ->
         Column(

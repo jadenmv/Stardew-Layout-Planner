@@ -31,8 +31,9 @@ fun NewFarmDialog(
     onCreate: () -> Unit
 ) {
     var farmName by remember { mutableStateOf("") }
-    var selectedFarmType by remember { mutableStateOf("") }
+    var selectedFarmType by remember { mutableStateOf(FarmTypes.all.first()) }
     var expanded by remember { mutableStateOf(false) }
+    var isNameError by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -41,8 +42,19 @@ fun NewFarmDialog(
             Column {
                 TextField(
                     value = farmName,
-                    onValueChange = { farmName = it },
+                    onValueChange = { 
+                        farmName = it
+                        if (isNameError && it.isNotBlank()) {
+                            isNameError = false
+                        }
+                    },
                     label = { Text("Farm Name") },
+                    isError = isNameError,
+                    supportingText = {
+                        if (isNameError) {
+                            Text("Please enter a farm name")
+                        }
+                    },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -83,13 +95,17 @@ fun NewFarmDialog(
 
         confirmButton = {
             Button(onClick = {
-                val newFarm = Farm(
-                    name = farmName,
-                    type = selectedFarmType
-                )
-                farmViewModel.createNewFarm(newFarm)
-                onCreate()
-                onDismiss()
+                if (farmName.isBlank()) {
+                    isNameError = true
+                } else {
+                    val newFarm = Farm(
+                        name = farmName,
+                        type = selectedFarmType
+                    )
+                    farmViewModel.createNewFarm(newFarm)
+                    onCreate()
+                    onDismiss()
+                }
             }) {
                 Text("Create")
             }
