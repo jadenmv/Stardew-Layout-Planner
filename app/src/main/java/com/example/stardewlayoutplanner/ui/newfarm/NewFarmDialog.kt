@@ -67,7 +67,7 @@ fun NewFarmDialog(
                 ) {
                     TextField(
                         readOnly = true,
-                        value = selectedFarmType,
+                        value = selectedFarmType.name,
                         onValueChange = {},
                         label = { Text("Farm Type") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -81,7 +81,7 @@ fun NewFarmDialog(
                     ) {
                         FarmTypes.all.forEach { type ->
                             DropdownMenuItem(
-                                text = { Text(type) },
+                                text = { Text(type.name) },
                                 onClick = {
                                     selectedFarmType = type
                                     expanded = false
@@ -100,9 +100,11 @@ fun NewFarmDialog(
                 } else {
                     val newFarm = Farm(
                         name = farmName,
-                        type = selectedFarmType
+                        type = selectedFarmType.name,
+                        imageRes = selectedFarmType.imageRes
                     )
                     farmViewModel.createNewFarm(newFarm)
+                    farmViewModel.setFarm(newFarm) // Update the selected farm in ViewModel
                     onCreate()
                     onDismiss()
                 }
@@ -118,15 +120,3 @@ fun NewFarmDialog(
         }
     )
 }
-
-//@SuppressLint("ViewModelConstructorInComposable")
-//@Preview(showBackground = true)
-//@Composable
-//fun NewFarmMenuPreview() {
-//    val viewModel = NewFarmViewModel()
-//    NewFarmMenu(
-//        newFarmViewModel = viewModel,
-//        onDismiss = {},
-//        onCreate = {}
-//    )
-//}

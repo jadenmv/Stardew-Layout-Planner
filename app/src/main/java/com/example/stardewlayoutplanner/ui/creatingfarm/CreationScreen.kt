@@ -2,14 +2,39 @@ package com.example.stardewlayoutplanner.ui.creatingfarm
 
 import android.annotation.SuppressLint
 import android.app.Application
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,12 +47,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stardewlayoutplanner.data.categories
 import com.example.stardewlayoutplanner.data.model.Category
 import com.example.stardewlayoutplanner.data.model.Farm
-import com.example.stardewlayoutplanner.data.model.PlaceableItem
 import com.example.stardewlayoutplanner.ui.FarmViewModel
 import com.example.stardewlayoutplanner.ui.creatingfarm.creationrowcategory.CategoryButton
 import com.example.stardewlayoutplanner.ui.creatingfarm.creationrowcategory.CategoryViewModel
 import com.example.stardewlayoutplanner.ui.loadfarm.LoadViewModel
-import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,16 +68,18 @@ fun CreationScreen(
     val items by categoryViewModel.currentItems.collectAsState()
     val isSubCategory = items != categories
 
-    var placedItems by remember { mutableStateOf(listOf<PlaceableItem>()) }
+    BackHandler {
+        farmViewModel.saveDialog.showDialog()
+    }
 
+    // non-functional save dialog on exiting creation screen. connect to db later w/ json for items
     if (farmViewModel.saveDialog.showDialog.value) {
         AlertDialog(
             onDismissRequest = { farmViewModel.saveDialog.hideDialog() },
-            title = { Text("Save Farm?") },
-            text = { Text("Would you like to save your current farm layout?") },
+            title = { Text("Exit Farm?") },
+            text = { Text("Would you like to save your farm before exiting?") },
             confirmButton = {
                 Button(onClick = {
-                    farm?.let { farmViewModel.createNewFarm(it) }
                     farmViewModel.saveDialog.hideDialog()
                     nav.popBackStack()
                 }) {
@@ -81,7 +106,7 @@ fun CreationScreen(
                     scrolledContainerColor = Color.Transparent
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { nav.popBackStack() }) {
+                    IconButton(onClick = { farmViewModel.saveDialog.showDialog() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",
@@ -112,7 +137,7 @@ fun CreationScreen(
                     }
 
                     Button(onClick = { isCollapsed = !isCollapsed }) {
-                        Text(if (isCollapsed) "up" else "down")
+                        Text(if (isCollapsed) "Unhide" else "Hide")
                     }
                 }
 
@@ -147,17 +172,10 @@ fun CreationScreen(
                 .fillMaxSize()
         ) {
 
-//            CreationFarmCanvas(
-//                placeableItems = placedItems,
-//                selectedCategory = selectedItem,
-//                onPlaceItem = { grid, category ->
-//                    placedItems = placedItems + PlaceableItem(
-//                        id = UUID.randomUUID().toString(),
-//                        category = category,
-//                        position = grid
-//                    )
-//                }
-//            )
+            CreationFarmCanvas(
+                backgroundRes = farm?.imageRes
+            )
+        }
 
             Column(
                 modifier = Modifier
@@ -175,7 +193,6 @@ fun CreationScreen(
             }
         }
     }
-}
 
 
 @SuppressLint("ViewModelConstructorInComposable")

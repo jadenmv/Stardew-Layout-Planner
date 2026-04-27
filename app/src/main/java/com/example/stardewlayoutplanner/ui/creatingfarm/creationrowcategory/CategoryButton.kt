@@ -24,7 +24,7 @@ fun CategoryButton(
         contentPadding = PaddingValues(0.dp),
         modifier = Modifier.size(80.dp)
     ) {
-        if (category.imageRes != null) {
+        if (category.imageRes != null && category.imageRes != 0) {
             Image(
                 painter = painterResource(id = category.imageRes),
                 contentDescription = category.name,

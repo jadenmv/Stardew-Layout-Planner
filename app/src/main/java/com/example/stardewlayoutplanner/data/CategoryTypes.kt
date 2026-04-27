@@ -5,7 +5,7 @@ import com.example.stardewlayoutplanner.R
 
 val crops = Category(
     name = "Crops",
-    imageRes = null, //R.drawable.
+    imageRes = null,
     subItems = listOf(
         Category(name = "pumpkin", imageRes = R.drawable.pumpkin),
         Category(name = "corn"),
@@ -17,7 +17,7 @@ val crops = Category(
 
 val equipment = Category(
     name = "Equipment",
-    imageRes = null, //R.drawable.
+    imageRes = null,
     subItems = listOf(
         Category(name = "furnace"),
         Category(name = "chest"),
@@ -38,7 +38,7 @@ val equipment = Category(
 
 val furniture = Category(
     name = "Furniture",
-    imageRes = null, //R.drawable.
+    imageRes = null,
     subItems = listOf(
         Category(name = "table"),
         Category(name = "chair"),
